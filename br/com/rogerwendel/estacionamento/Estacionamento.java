@@ -70,6 +70,8 @@ public class Estacionamento {
                 // Se confirmado o registro do ticket
                 t.getVaga().setOcupada(false);// Preenche a vaga como livre
                 t.setDataHoraSaida(LocalDateTime.now());//Pega o horário da saída para calculo do valor do ticket
+                t.calcularValorTicket();
+                System.out.println(t);
                 tickets.remove(t);// Libera o ticket do veiculo e vaga
                 System.out.println("Ticket do veículo " + veiculo.getPlaca() + " removido com sucesso! Vaga: " + t.getVaga().getNumeroVaga());
             })

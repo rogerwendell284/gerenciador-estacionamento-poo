@@ -50,19 +50,29 @@ public class Ticket {
 
     public void calcularValorTicket() { 
 
-        if(dataHoraSaida == null) return;
+        if(dataHoraSaida == null) {
+            return;
+        }
 
         Duration duracao = Duration.between(dataHoraEntrada, dataHoraSaida);
-        long horas = duracao.toHours();
+        long minutos = duracao.toMinutes();
 
-        if(horas < 1) horas = 1;
-
-        this.valor = horas * VALOR_VAGA_HORA;
+        if (minutos <= 60) {
+            this.valor = VALOR_VAGA_HORA; // Cobra a primeira hora cheia
+        } else {
+            // Cobra a primeira hora cheia + o valor proporcional dos minutos que excederam 60
+            this.valor = VALOR_VAGA_HORA + (minutos - 60) * ((double) VALOR_VAGA_HORA / 60);
+        }
     }
 
     @Override
     public String toString() {
-        return "Ticket [dataHoraEntrada=" + dataHoraEntrada.format(formatter) + ";\ndataHoraSaida=" + dataHoraSaida == null ? "Saída não registrada" : dataHoraSaida.format(formatter) + "\nvalor= R$" + valor
+        String valorFormatado = String.format("%.2f", this.valor);
+        String saidaFormatada = (this.dataHoraSaida.equals(this.dataHoraEntrada)) 
+            ? "Saída não registrada" 
+            : dataHoraSaida.format(formatter);
+
+        return "Ticket [dataHoraEntrada=" + dataHoraEntrada.format(formatter) + ";\ndataHoraSaida=" + saidaFormatada + "\nvalor= R$" + valorFormatado
                 + "\n" + veiculo + "\n" + vaga + "\n-------------------------------------\n";
     }
 
